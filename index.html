@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绍将天使基金</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card {
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: none;
+            border-radius: 12px;
+            transition: transform 0.2s;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+        .card-header {
+            border-radius: 12px 12px 0 0 !important;
+            font-weight: 600;
+            padding: 15px 20px;
+        }
+
+        .positive {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .negative {
+            color: #2ecc71;
+            font-weight: 600;
+        }
+
+        .login-container {
+            max-width: 420px;
+            margin: 100px auto;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .index-card {
+            text-align: center;
+            padding: 20px 15px;
+            transition: all 0.3s;
+        }
+
+            .index-card:hover {
+                background-color: rgba(0, 0, 0, 0.02);
+                border-radius: 10px;
+            }
+
+        .index-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .history-table {
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+            .history-table table {
+                margin-bottom: 0;
+                table-layout: fixed;
+                width: 100%;
+            }
+
+            .history-table th {
+                background-color: #f8f9fa;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+            }
+
+            .history-table td {
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                white-space: normal;
+            }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .personal-card {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .stock-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .growth-badge {
+            font-size: 1.1rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        .value-display {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 5px 0;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 5px 0;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .stock-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+
+        .stock-col {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .stock-col {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+
+        .empty-stock {
+            border: 2px dashed #dee2e6;
+            background-color: #f8f9fa;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+        }
+
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .stock-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .stock-code {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .stock-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stock-detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .stock-detail-label {
+            color: #6c757d;
+        }
+
+        .stock-detail-value {
+            font-weight: 600;
+        }
+
+        .user-history-table {
+            max-height: 300px;
+        }
+
+        .period-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 0;
+        }
+
+        .period-stat-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .period-stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .period-stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .history-date-col {
+            width: 40%;
+        }
+
+        .history-change-col {
+            width: 60%;
+        }
+
+        .user-stats-section {
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 登录界面 -->
+    <div id="login-container" class="login-container">
+        <h2 class="text-center mb-4" style="color: #343a40; font-weight: 700;">用户登录</h2>
+        <form id="login-form">
+            <div class="mb-3">
+                <label for="username" class="form-label" style="font-weight: 500;">用户名</label>
+                <input type="text" class="form-control" id="username" required style="padding: 10px; border-radius: 8px;">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label" style="font-weight: 500;">密码</label>
+                <input type="password" class="form-control" id="password" required style="padding: 10px; border-radius: 8px;">
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2" style="border-radius: 8px; font-weight: 600; font-size: 1.1rem;">登录</button>
+        </form>
+        <div class="text-center mt-3">
+            <a href="#" id="admin-login-link" style="color: #495057; text-decoration: none;">管理员登录</a>
+        </div>
+    </div>
+
+    <!-- 主应用界面 -->
+    <div id="main-app" class="container hidden">
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 rounded" style="border-radius: 12px !important; padding: 12px 20px;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#" style="font-size: 1.6rem;">股票与基金管理系统</a>
+                <div class="navbar-nav ms-auto">
+                    <span class="navbar-text me-3" id="user-info" style="font-size: 1.1rem;"></span>
+                    <button class="btn btn-sm btn-outline-light" id="logout-btn" style="border-radius: 6px;">退出</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 指数模块 -->
+        <div class="card">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">指数涨跌幅</h5>
+                <span class="badge bg-light text-dark">实时</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 index-card">
+                        <h6>沪深指数</h6>
+                        <div id="sh-index" class="index-value">--</div>
+                    </div>
+                    <div class="col-md-4 index-card">
+                        <h6>深证指数</h6>
+                        <div id="sz-index" class="index-value">--</div>
+                    </div>
+                    <div class="col-md-4 index-card">
+                        <h6>创业板指数</h6>
+                        <div id="cyb-index" class="index-value">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 基金模块 -->
+        <div class="card">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">基金模块</h5>
+                <span class="badge bg-light text-dark">龙头基金</span>
+            </div>
+            <div class="card-body">
+                <div id="fund-info" class="d-flex align-items-center">
+                    <span class="me-2" style="font-size: 1.1rem;">平均涨跌幅:</span>
+                    <span id="fund-change" class="fs-4">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户模块 -->
+        <div class="card">
+            <div class="card-header bg-warning d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">用户模块</h5>
+                <span class="badge bg-light text-dark">个人资产</span>
+            </div>
+            <div class="card-body">
+                <div id="personal-info"></div>
+            </div>
+        </div>
+
+        <!-- 股票持仓模块 -->
+        <div class="card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">股票持仓</h5>
+                <span class="badge bg-light text-dark">10个位置</span>
+            </div>
+            <div class="card-body">
+                <div id="stock-holdings" class="stock-row">
+                    <!-- 股票持仓将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户时间段统计模块 -->
+        <div class="card">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">时间段统计</h5>
+                <span class="badge bg-light text-dark">收益概览</span>
+            </div>
+            <div class="card-body user-stats-section">
+                <div id="user-period-stats" class="period-stats">
+                    <!-- 用户时间段统计将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 管理员模块 -->
+        <div id="admin-panel" class="card hidden">
+            <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">管理员面板</h5>
+                <span class="badge bg-light text-dark">只读模式</span>
+            </div>
+            <div class="card-body">
+                <div class="section-title">市场概览</div>
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                            <span>沪深指数:</span>
+                            <span id="admin-sh-change" class="fs-5">--</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                            <span>深证指数:</span>
+                            <span id="admin-sz-change" class="fs-5">--</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                            <span>创业板指数:</span>
+                            <span id="admin-cyb-change" class="fs-5">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                            <span>基金平均涨跌幅:</span>
+                            <span id="admin-fund-avg" class="fs-5">--</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                            <span>当前总金额:</span>
+                            <span id="admin-current-money" class="fs-5">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">时间段统计</div>
+                <div id="admin-period-stats" class="period-stats mb-4">
+                    <!-- 管理员时间段统计将通过JavaScript动态生成 -->
+                </div>
+
+                <div class="section-title">历史数据</div>
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="history-table">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="history-date-col">日期</th>
+                                        <th class="history-change-col">涨跌幅 (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-data-table">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">用户持仓信息</div>
+                <div class="row">
+                    <div class="col-12">
+                        <div id="user-shares-admin" class="stock-row"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图表模块 -->
+        <div class="card">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">资金走势图</h5>
+                <span class="badge bg-light text-dark">趋势分析</span>
+            </div>
+            <div class="card-body">
+                <canvas id="funds-chart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 默认数据 - 交易日数据
+        const defaultData = {
+            indices: {
+                sh: { changePercent: 0.7 },
+                sz: { changePercent: 1.95 },
+                cyb: { changePercent: 2.93 }
+            },
+            fundAvgChange: 1.2,
+            currentTotalMoney: 14895,
+            history: [
+                { date: "2025-09-26", value: 15774 },
+                { date: "2025-09-29", value: 15782 },
+                { date: "2025-09-30", value: 15886 },
+                { date: "2025-10-09", value: 16155 },
+                { date: "2025-10-10", value: 16000 },
+                { date: "2025-10-13", value: 16160 },
+                { date: "2025-10-14", value: 15402 },
+                { date: "2025-10-15", value: 15468 },
+                { date: "2025-10-16", value: 15097 },
+                { date: "2025-10-17", value: 14501 },
+                { date: "2025-10-20", value: 14623 },
+                { date: "2025-10-21", value: 14926 },
+                { date: "2025-10-22", value: 14782 },
+                { date: "2025-10-23", value: 14595 },
+                { date: "2025-10-24", value: 13994 },
+                { date: "2025-10-27", value: 14706 },
+                { date: "2025-10-28", value: 15031 },
+                { date: "2025-10-29", value: 14954 }
+            ]
+        };
+
+        // 公共股票持仓数据 - 所有用户共享
+        const commonStocks = [
+            { code: "600105", name: "永鼎股份", shares: 300, price: 16.03, changePercent: -1.03 },
+            { code: "601611", name: "中国核建", shares: 0, price: 14.55, changePercent: 4.0 },
+            { code: "603011", name: "合锻智能", shares: 0, price: 27.49, changePercent: -3.1 },
+            { code: "002759", name: "天际股份", shares: 0, price: 25.49, changePercent: 0.0 },
+            { code: "002171", name: "楚江新材", shares: 400, price: 14.01, changePercent: 1.8 },
+            { code: "603933", name: "睿能科技", shares: 200, price: 23.45, changePercent: -2.27 }
+        ];
+
+        // 用户数据
+        const users = {
+            "bai": {
+                password: "bai123",
+                name: "白杰凯",
+                shares: 4100,
+                initialMoney: 4000
+            },
+            "wang": {
+                password: "wang123",
+                name: "王嘉琪",
+                shares: 3074,
+                initialMoney: 3000
+            },
+            "huang": {
+                password: "huang123",
+                name: "黄绍将",
+                shares: 8826,
+                initialMoney: 9000,
+                isAdmin: true
+            }
+        };
+
+        // 应用状态
+        let currentUser = null;
+        let appData = loadData();
+
+        // DOM 元素
+        const loginContainer = document.getElementById('login-container');
+        const mainApp = document.getElementById('main-app');
+        const loginForm = document.getElementById('login-form');
+        const userInfo = document.getElementById('user-info');
+        const logoutBtn = document.getElementById('logout-btn');
+        const adminPanel = document.getElementById('admin-panel');
+        const adminLoginLink = document.getElementById('admin-login-link');
+        const stockHoldings = document.getElementById('stock-holdings');
+        const userPeriodStats = document.getElementById('user-period-stats');
+        const adminPeriodStats = document.getElementById('admin-period-stats');
+
+        // 数据存储功能
+        function saveData() {
+            localStorage.setItem('stockFundData', JSON.stringify(appData));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('stockFundData');
+            return saved ? JSON.parse(saved) : defaultData;
+        }
+
+        // 登录功能
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (users[username] && users[username].password === password) {
+                currentUser = users[username];
+                currentUser.username = username;
+                loginContainer.classList.add('hidden');
+                mainApp.classList.remove('hidden');
+                userInfo.textContent = `欢迎, ${currentUser.name}`;
+
+                if (currentUser.isAdmin) {
+                    adminPanel.classList.remove('hidden');
+                    loadAdminView();
+                } else {
+                    adminPanel.classList.add('hidden');
+                }
+
+                updateUI();
+            } else {
+                alert('用户名或密码错误！');
+            }
+        });
+
+        // 管理员登录链接
+        adminLoginLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.getElementById('username').value = 'huang';
+            document.getElementById('password').focus();
+        });
+
+        // 退出登录
+        logoutBtn.addEventListener('click', function () {
+            currentUser = null;
+            mainApp.classList.add('hidden');
+            loginContainer.classList.remove('hidden');
+            loginForm.reset();
+        });
+
+        // 更新UI
+        function updateUI() {
+            // 更新指数信息
+            document.getElementById('sh-index').innerHTML = formatIndex('sh');
+            document.getElementById('sz-index').innerHTML = formatIndex('sz');
+            document.getElementById('cyb-index').innerHTML = formatIndex('cyb');
+
+            // 更新基金信息
+            const fundChangeElement = document.getElementById('fund-change');
+            fundChangeElement.textContent = `${appData.fundAvgChange > 0 ? '+' : ''}${appData.fundAvgChange}%`;
+            fundChangeElement.className = `fs-4 ${appData.fundAvgChange >= 0 ? 'positive' : 'negative'}`;
+
+            const personalInfo = document.getElementById('personal-info');
+            if (!currentUser.isAdmin) {
+                // 计算总份额
+                const totalShares = calculateTotalShares();
+                // 计算每份价值
+                const shareValue = appData.currentTotalMoney / totalShares;
+                // 计算用户当前金额
+                const userMoney = (currentUser.shares * shareValue).toFixed(2);
+                // 计算今日增长率
+                const todayGrowthRate = calculateTodayGrowthRate();
+                // 计算今日涨跌金额
+                const todayChangeAmount = calculateTodayChangeAmount();
+                // 计算用户今日涨跌金额
+                const userTodayChangeAmount = (todayChangeAmount * (currentUser.shares / totalShares)).toFixed(2);
+
+                personalInfo.innerHTML = `
+                        <div class="personal-card">
+                            <h6 class="mb-3">${currentUser.name} 的个人信息</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>持有份额:</span>
+                                        <span class="value-display">${currentUser.shares.toLocaleString()}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>当前金额:</span>
+                                        <span class="value-display">${parseFloat(userMoney).toLocaleString()} 元</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-center justify-content-center">
+                                    <div class="text-center">
+                                        <div class="mb-1">今日涨跌</div>
+                                        <div class="growth-badge ${todayGrowthRate >= 0 ? 'positive' : 'negative'}">
+                                            ${todayGrowthRate >= 0 ? '+' : ''}${todayGrowthRate}%
+                                        </div>
+                                        <div class="mt-2 ${todayChangeAmount >= 0 ? 'positive' : 'negative'}">
+                                            ${todayChangeAmount >= 0 ? '+' : ''}${parseFloat(userTodayChangeAmount).toLocaleString()} 元
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+            } else {
+                personalInfo.innerHTML = '';
+            }
+
+            // 更新股票持仓
+            updateStockHoldings();
+
+            // 更新用户时间段统计
+            updateUserPeriodStats();
+
+            // 更新图表
+            updateChart();
+        }
+
+        // 更新股票持仓显示
+        function updateStockHoldings() {
+            stockHoldings.innerHTML = '';
+
+            // 计算总份额和用户份额占比
+            const totalShares = calculateTotalShares();
+            const userShareRatio = currentUser.isAdmin ? 1 : (currentUser.shares / totalShares);
+
+            // 显示公共股票持仓
+            if (commonStocks && commonStocks.length > 0) {
+                commonStocks.forEach(stock => {
+                    // 计算股票总市值
+                    const stockTotalValue = (stock.shares * stock.price);
+                    // 计算股票今日总收益
+                    const stockTotalChangeAmount = (stockTotalValue * stock.changePercent / 100);
+
+                    // 根据用户类型计算显示的收益
+                    let displayChangeAmount;
+                    if (currentUser.isAdmin) {
+                        // 管理员看到总收益
+                        displayChangeAmount = stockTotalChangeAmount;
+                    } else {
+                        // 普通用户看到按份额比例计算的收益
+                        displayChangeAmount = stockTotalChangeAmount * userShareRatio;
+                    }
+
+                    const stockCol = document.createElement('div');
+                    stockCol.className = 'stock-col';
+                    stockCol.innerHTML = `
+                            <div class="stock-card">
+                                <div class="stock-header">
+                                    <div>
+                                        <div class="stock-name">${stock.name}</div>
+                                        <div class="stock-code">${stock.code}</div>
+                                    </div>
+                                    <div class="${stock.changePercent >= 0 ? 'positive' : 'negative'}">
+                                        ${stock.changePercent >= 0 ? '+' : ''}${stock.changePercent}%
+                                    </div>
+                                </div>
+                                <div class="stock-details">
+                                    <div class="stock-detail-item">
+                                        <span class="stock-detail-label">持仓数量:</span>
+                                        <span class="stock-detail-value">${stock.shares.toLocaleString()} 股</span>
+                                    </div>
+                                    <div class="stock-detail-item">
+                                        <span class="stock-detail-label">当前价格:</span>
+                                        <span class="stock-detail-value">${stock.price.toFixed(2)} 元</span>
+                                    </div>
+                                    <div class="stock-detail-item">
+                                        <span class="stock-detail-label">持仓市值:</span>
+                                        <span class="stock-detail-value">${parseFloat(stockTotalValue).toLocaleString()} 元</span>
+                                    </div>
+                                    <div class="stock-detail-item">
+                                        <span class="stock-detail-label">今日收益:</span>
+                                        <span class="stock-detail-value ${displayChangeAmount >= 0 ? 'positive' : 'negative'}">
+                                            ${displayChangeAmount >= 0 ? '+' : ''}${parseFloat(displayChangeAmount).toFixed(2)} 元
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    stockHoldings.appendChild(stockCol);
+                });
+            }
+
+            // 填充剩余的空位
+            const emptySlots = 10 - (commonStocks ? commonStocks.length : 0);
+            for (let i = 0; i < emptySlots; i++) {
+                const emptyCol = document.createElement('div');
+                emptyCol.className = 'stock-col';
+                emptyCol.innerHTML = `
+                        <div class="stock-card empty-stock">
+                            <div class="text-center">
+                                <div>空位 ${i + 1}</div>
+                                <small class="text-muted">可添加新股票</small>
+                            </div>
+                        </div>
+                    `;
+                stockHoldings.appendChild(emptyCol);
+            }
+        }
+
+        // 更新用户时间段统计
+        function updateUserPeriodStats() {
+            updatePeriodStats(userPeriodStats);
+        }
+
+        // 更新时间段统计
+        function updatePeriodStats(container) {
+            const periods = [
+                { label: '近一周', days: 7 },
+                { label: '近一月', days: 30 },
+                { label: '近三月', days: 90 },
+                { label: '近一年', days: 365 }
+            ];
+
+            container.innerHTML = '';
+
+            periods.forEach(period => {
+                const changePercent = calculatePeriodChange(period.days);
+                const changeClass = changePercent >= 0 ? 'positive' : 'negative';
+
+                const statItem = document.createElement('div');
+                statItem.className = 'period-stat-item';
+                statItem.innerHTML = `
+                        <div class="period-stat-label">${period.label}</div>
+                        <div class="period-stat-value ${changeClass}">
+                            ${changePercent >= 0 ? '+' : ''}${changePercent}%
+                        </div>
+                    `;
+                container.appendChild(statItem);
+            });
+        }
+
+        // 计算指定时间段内的涨跌幅
+        function calculatePeriodChange(days) {
+            const history = appData.history;
+            if (history.length < 2) return 0;
+
+            // 获取最近days天的数据，如果不足则使用所有可用数据
+            const recentData = history.slice(-Math.min(days + 1, history.length));
+
+            if (recentData.length < 2) return 0;
+
+            const startValue = recentData[0].value;
+            const endValue = recentData[recentData.length - 1].value;
+
+            return ((endValue - startValue) / startValue * 100).toFixed(2);
+        }
+
+        // 计算总份额
+        function calculateTotalShares() {
+            let total = 0;
+            for (const username in users) {
+                total += users[username].shares;
+            }
+            return total;
+        }
+
+        // 计算今日增长率（今天比昨天的涨跌）
+        function calculateTodayGrowthRate() {
+            const history = appData.history;
+            if (history.length < 2) return 0;
+
+            const todayValue = history[history.length - 1].value;
+            const yesterdayValue = history[history.length - 2].value;
+
+            return ((todayValue - yesterdayValue) / yesterdayValue * 100).toFixed(2);
+        }
+
+        // 计算今日涨跌金额
+        function calculateTodayChangeAmount() {
+            const history = appData.history;
+            if (history.length < 2) return 0;
+
+            const todayValue = history[history.length - 1].value;
+            const yesterdayValue = history[history.length - 2].value;
+
+            return todayValue - yesterdayValue;
+        }
+
+        // 格式化指数显示
+        function formatIndex(index) {
+            const data = appData.indices[index];
+            const changeClass = data.changePercent >= 0 ? 'positive' : 'negative';
+            return `
+                    <span class="${changeClass}">${data.changePercent >= 0 ? '+' : ''}${data.changePercent.toFixed(2)}%</span>
+                `;
+        }
+
+        // 计算涨跌幅
+        function calculateChangePercent(current, previous) {
+            if (!previous || previous === 0) return 0;
+            return ((current - previous) / previous * 100).toFixed(2);
+        }
+
+        // 计算涨跌金额
+        function calculateChangeAmount(current, previous) {
+            if (!previous) return 0;
+            return current - previous;
+        }
+
+        // 管理员视图
+        function loadAdminView() {
+            // 显示指数涨跌幅
+            document.getElementById('admin-sh-change').textContent = `${appData.indices.sh.changePercent >= 0 ? '+' : ''}${appData.indices.sh.changePercent}%`;
+            document.getElementById('admin-sh-change').className = `fs-5 ${appData.indices.sh.changePercent >= 0 ? 'positive' : 'negative'}`;
+
+            document.getElementById('admin-sz-change').textContent = `${appData.indices.sz.changePercent >= 0 ? '+' : ''}${appData.indices.sz.changePercent}%`;
+            document.getElementById('admin-sz-change').className = `fs-5 ${appData.indices.sz.changePercent >= 0 ? 'positive' : 'negative'}`;
+
+            document.getElementById('admin-cyb-change').textContent = `${appData.indices.cyb.changePercent >= 0 ? '+' : ''}${appData.indices.cyb.changePercent}%`;
+            document.getElementById('admin-cyb-change').className = `fs-5 ${appData.indices.cyb.changePercent >= 0 ? 'positive' : 'negative'}`;
+
+            // 显示基金平均涨跌幅
+            document.getElementById('admin-fund-avg').textContent = `${appData.fundAvgChange >= 0 ? '+' : ''}${appData.fundAvgChange}%`;
+            document.getElementById('admin-fund-avg').className = `fs-5 ${appData.fundAvgChange >= 0 ? 'positive' : 'negative'}`;
+
+            // 显示当前总金额
+            document.getElementById('admin-current-money').textContent = appData.currentTotalMoney.toLocaleString();
+
+            // 更新历史数据表格
+            const historyTable = document.getElementById('history-data-table');
+            historyTable.innerHTML = '';
+
+            appData.history.forEach((record, index) => {
+                let changePercent;
+
+                if (index === 0) {
+                    // 第一条记录没有前一天数据，显示0
+                    changePercent = 0;
+                } else {
+                    const prevValue = appData.history[index - 1].value;
+                    changePercent = calculateChangePercent(record.value, prevValue);
+                }
+
+                const changeClass = changePercent >= 0 ? 'positive' : 'negative';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                        <td>${record.date}</td>
+                        <td class="${changeClass}">${changePercent >= 0 ? '+' : ''}${changePercent}%</td>
+                    `;
+                historyTable.appendChild(row);
+            });
+
+            // 更新管理员时间段统计
+            updatePeriodStats(adminPeriodStats);
+
+            // 更新用户持仓信息
+            const userSharesAdmin = document.getElementById('user-shares-admin');
+            userSharesAdmin.innerHTML = '';
+
+            // 计算总份额
+            const totalShares = calculateTotalShares();
+            // 计算每份价值
+            const shareValue = appData.currentTotalMoney / totalShares;
+            // 计算今日增长率
+            const todayGrowthRate = calculateTodayGrowthRate();
+            // 计算今日涨跌金额
+            const todayChangeAmount = calculateTodayChangeAmount();
+
+            for (const username in users) {
+                const user = users[username];
+                const userMoney = (user.shares * shareValue).toFixed(2);
+                // 计算用户持仓百分比
+                const holdingPercentage = ((user.shares / totalShares) * 100).toFixed(2);
+                // 计算用户今日涨跌金额
+                const userTodayChangeAmount = (todayChangeAmount * (user.shares / totalShares)).toFixed(2);
+
+                userSharesAdmin.innerHTML += `
+                        <div class="stock-col">
+                            <div class="stock-card">
+                                <div class="stock-header">
+                                    <div class="stock-name">${user.name}</div>
+                                    <div class="${todayGrowthRate >= 0 ? 'positive' : 'negative'}">
+                                        ${todayGrowthRate >= 0 ? '+' : ''}${todayGrowthRate}%
+                                    </div>
+                                </div>
+                                <div class="stock-details">
+                                    <div class="stock-detail-item">
+                                        <span class="stock-detail-label">持有份额:</span>
+                                        <span class="stock-detail-value">${user.shares.toLocaleString()}</span>
+                                    </div>
+                                    <div class="stock-detail-item">
+                                        <span class="stock-detail-label">持仓百分比:</span>
+                                        <span class="stock-detail-value">${holdingPercentage}%</span>
+                                    </div>
+                                    <div class="stock-detail-item">
+                                        <span class="stock-detail-label">当前金额:</span>
+                                        <span class="stock-detail-value">${parseFloat(userMoney).toLocaleString()} 元</span>
+                                    </div>
+                                    <div class="stock-detail-item">
+                                        <span class="stock-detail-label">今日涨跌:</span>
+                                        <span class="stock-detail-value ${todayChangeAmount >= 0 ? 'positive' : 'negative'}">
+                                            ${todayChangeAmount >= 0 ? '+' : ''}${parseFloat(userTodayChangeAmount).toLocaleString()} 元
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <small class="text-muted">持有 ${commonStocks ? commonStocks.length : 0} 只股票</small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+            }
+        }
+
+        // 图表功能
+        let fundsChart = null;
+
+        function updateChart() {
+            const ctx = document.getElementById('funds-chart').getContext('2d');
+
+            if (fundsChart) {
+                fundsChart.destroy();
+            }
+
+            const labels = appData.history.map(item => {
+                const date = new Date(item.date);
+                return `${date.getMonth() + 1}/${date.getDate()}`;
+            });
+            const data = appData.history.map(item => item.value);
+
+            fundsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '总资金 (元)',
+                        data: data,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        tension: 0.1,
+                        fill: true,
+                        pointBackgroundColor: 'rgb(75, 192, 192)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                            titleFont: {
+                                size: 14
+                            },
+                            bodyFont: {
+                                size: 13
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: '金额 (元)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '日期',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 初始化
+        updateChart();
+    </script>
+</body>
+</html>
