@@ -535,7 +535,7 @@
                 { date: "2025-10-29", value: 14918 },
                 { date: "2025-10-30", value: 14961 },
                 { date: "2025-10-31", value: 15356 },
-                { date: "2025-10-31", value: 15577 }
+                { date: "2025-11-03", value: 15577 }
             ]
         };
 
@@ -669,33 +669,33 @@
                 const userTodayChangeAmount = (todayChangeAmount * (currentUser.shares / totalShares)).toFixed(2);
 
                 personalInfo.innerHTML = `
-                            <div class="personal-card">
-                                <h6 class="mb-3">${currentUser.name} 的个人信息</h6>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span>持有份额:</span>
-                                            <span class="value-display">${currentUser.shares.toLocaleString()}</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span>当前金额:</span>
-                                            <span class="value-display">${parseFloat(userMoney).toLocaleString()} 元</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 d-flex align-items-center justify-content-center">
-                                        <div class="text-center">
-                                            <div class="mb-1">今日涨跌</div>
-                                            <div class="growth-badge ${todayGrowthRate >= 0 ? 'positive' : 'negative'}">
-                                                ${todayGrowthRate >= 0 ? '+' : ''}${todayGrowthRate}%
+                                <div class="personal-card">
+                                    <h6 class="mb-3">${currentUser.name} 的个人信息</h6>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span>持有份额:</span>
+                                                <span class="value-display">${currentUser.shares.toLocaleString()}</span>
                                             </div>
-                                            <div class="mt-2 ${todayChangeAmount >= 0 ? 'positive' : 'negative'}">
-                                                ${todayChangeAmount >= 0 ? '+' : ''}${parseFloat(userTodayChangeAmount).toLocaleString()} 元
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span>当前金额:</span>
+                                                <span class="value-display">${parseFloat(userMoney).toLocaleString()} 元</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 d-flex align-items-center justify-content-center">
+                                            <div class="text-center">
+                                                <div class="mb-1">今日涨跌</div>
+                                                <div class="growth-badge ${todayGrowthRate >= 0 ? 'positive' : 'negative'}">
+                                                    ${todayGrowthRate >= 0 ? '+' : ''}${todayGrowthRate}%
+                                                </div>
+                                                <div class="mt-2 ${todayChangeAmount >= 0 ? 'positive' : 'negative'}">
+                                                    ${todayChangeAmount >= 0 ? '+' : ''}${parseFloat(userTodayChangeAmount).toLocaleString()} 元
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        `;
+                            `;
 
                 // 更新周收益信息
                 updateWeeklyInfo();
@@ -771,36 +771,36 @@
 
             const weeklyInfo = document.getElementById('weekly-info');
             weeklyInfo.innerHTML = `
-                    <div class="personal-card">
-                        <h6 class="mb-3">${currentUser.name} 的周收益</h6>
-                        <div class="week-stats">
-                            <div class="week-stat-item">
-                                <div class="week-stat-label">本周收益</div>
-                                <div class="week-stat-value ${weekData.changeAmount >= 0 ? 'positive' : 'negative'}">
-                                    ${weekData.changeAmount >= 0 ? '+' : ''}${parseFloat(userWeekChangeAmount).toLocaleString()} 元
+                        <div class="personal-card">
+                            <h6 class="mb-3">${currentUser.name} 的周收益</h6>
+                            <div class="week-stats">
+                                <div class="week-stat-item">
+                                    <div class="week-stat-label">本周收益</div>
+                                    <div class="week-stat-value ${weekData.changeAmount >= 0 ? 'positive' : 'negative'}">
+                                        ${weekData.changeAmount >= 0 ? '+' : ''}${parseFloat(userWeekChangeAmount).toLocaleString()} 元
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="week-stat-item">
-                                <div class="week-stat-label">周收益率</div>
-                                <div class="week-stat-value ${weekData.changePercent >= 0 ? 'positive' : 'negative'}">
-                                    ${weekData.changePercent >= 0 ? '+' : ''}${userWeekChangePercent}%
+                                <div class="week-stat-item">
+                                    <div class="week-stat-label">周收益率</div>
+                                    <div class="week-stat-value ${weekData.changePercent >= 0 ? 'positive' : 'negative'}">
+                                        ${weekData.changePercent >= 0 ? '+' : ''}${userWeekChangePercent}%
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="week-stat-item">
-                                <div class="week-stat-label">交易天数</div>
-                                <div class="week-stat-value">
-                                    ${appData.history.length - findWeekStartIndex()} 天
+                                <div class="week-stat-item">
+                                    <div class="week-stat-label">交易天数</div>
+                                    <div class="week-stat-value">
+                                        ${appData.history.length - findWeekStartIndex()} 天
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="week-stat-item">
-                                <div class="week-stat-label">周初资产</div>
-                                <div class="week-stat-value">
-                                    ${parseFloat((appData.history[findWeekStartIndex()].value * (currentUser.shares / totalShares)).toFixed(2)).toLocaleString()} 元
+                                <div class="week-stat-item">
+                                    <div class="week-stat-label">周初资产</div>
+                                    <div class="week-stat-value">
+                                        ${parseFloat((appData.history[findWeekStartIndex()].value * (currentUser.shares / totalShares)).toFixed(2)).toLocaleString()} 元
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
         }
 
         // 查找本周起始索引
@@ -828,11 +828,12 @@
 
         // 更新时间段统计
         function updatePeriodStats(container) {
+            // 修改为四个新项：本周、上周、上上周、本月
             const periods = [
-                { label: '近一周', days: 7 },
-                { label: '近一月', days: 30 },
-                { label: '近三月', days: 90 },
-                { label: '近一年', days: 365 }
+                { label: '本周', days: 7 },
+                { label: '上周', days: 14 },
+                { label: '上上周', days: 21 },
+                { label: '本月', days: 30 }
             ];
 
             container.innerHTML = '';
@@ -844,11 +845,11 @@
                 const statItem = document.createElement('div');
                 statItem.className = 'period-stat-item';
                 statItem.innerHTML = `
-                            <div class="period-stat-label">${period.label}</div>
-                            <div class="period-stat-value ${changeClass}">
-                                ${changePercent >= 0 ? '+' : ''}${changePercent}%
-                            </div>
-                        `;
+                                <div class="period-stat-label">${period.label}</div>
+                                <div class="period-stat-value ${changeClass}">
+                                    ${changePercent >= 0 ? '+' : ''}${changePercent}%
+                                </div>
+                            `;
                 container.appendChild(statItem);
             });
         }
@@ -905,8 +906,8 @@
             const data = appData.indices[index];
             const changeClass = data.changePercent >= 0 ? 'positive' : 'negative';
             return `
-                        <span class="${changeClass}">${data.changePercent >= 0 ? '+' : ''}${data.changePercent.toFixed(2)}%</span>
-                    `;
+                            <span class="${changeClass}">${data.changePercent >= 0 ? '+' : ''}${data.changePercent.toFixed(2)}%</span>
+                        `;
         }
 
         // 计算涨跌幅
@@ -953,9 +954,9 @@
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                            <td>${record.date}</td>
-                            <td class="${changeClass}">${changePercent >= 0 ? '+' : ''}${changePercent}%</td>
-                        `;
+                                <td>${record.date}</td>
+                                <td class="${changeClass}">${changePercent >= 0 ? '+' : ''}${changePercent}%</td>
+                            `;
                 historyTable.appendChild(row);
             });
 
@@ -984,17 +985,17 @@
                 const userTodayChangeAmount = (todayChangeAmount * (user.shares / totalShares)).toFixed(2);
 
                 userSharesAdmin.innerHTML += `
-                            <div class="period-stat-item">
-                                <div class="period-stat-label">${user.name}</div>
-                                <div class="period-stat-value">${holdingPercentage}%</div>
-                                <div class="mt-2">
-                                    <small>份额: ${user.shares.toLocaleString()}</small>
+                                <div class="period-stat-item">
+                                    <div class="period-stat-label">${user.name}</div>
+                                    <div class="period-stat-value">${holdingPercentage}%</div>
+                                    <div class="mt-2">
+                                        <small>份额: ${user.shares.toLocaleString()}</small>
+                                    </div>
+                                    <div class="${todayChangeAmount >= 0 ? 'positive' : 'negative'}">
+                                        ${todayChangeAmount >= 0 ? '+' : ''}${parseFloat(userTodayChangeAmount).toLocaleString()} 元
+                                    </div>
                                 </div>
-                                <div class="${todayChangeAmount >= 0 ? 'positive' : 'negative'}">
-                                    ${todayChangeAmount >= 0 ? '+' : ''}${parseFloat(userTodayChangeAmount).toLocaleString()} 元
-                                </div>
-                            </div>
-                        `;
+                            `;
             }
         }
     </script>
