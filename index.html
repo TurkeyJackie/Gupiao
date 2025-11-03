@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绍将天使基金</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --info-color: #4895ef;
+            --warning-color: #f72585;
+            --danger-color: #b5179e;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --positive-color: #e63946;
+            --negative-color: #2a9d8f;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding-top: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .card {
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 16px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+        }
+
+            .card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            }
+
+        .card-header {
+            border-radius: 16px 16px 0 0 !important;
+            font-weight: 700;
+            padding: 18px 25px;
+            border-bottom: none;
+        }
+
+        .positive {
+            color: var(--positive-color);
+            font-weight: 700;
+        }
+
+        .negative {
+            color: var(--negative-color);
+            font-weight: 700;
+        }
+
+        .login-container {
+            max-width: 420px;
+            margin: 100px auto;
+            padding: 40px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .index-card {
+            text-align: center;
+            padding: 25px 15px;
+            transition: all 0.3s;
+            border-radius: 12px;
+        }
+
+            .index-card:hover {
+                background-color: rgba(67, 97, 238, 0.05);
+                transform: scale(1.03);
+            }
+
+        .index-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .history-table {
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+            .history-table table {
+                margin-bottom: 0;
+                table-layout: fixed;
+                width: 100%;
+            }
+
+            .history-table th {
+                background-color: var(--light-color);
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                font-weight: 600;
+            }
+
+            .history-table td {
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                white-space: normal;
+            }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.6rem;
+            letter-spacing: -0.5px;
+        }
+
+        .personal-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 14px;
+            padding: 25px;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .growth-badge {
+            font-size: 1.2rem;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: 700;
+        }
+
+        .value-display {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 5px 0;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid rgba(67, 97, 238, 0.2);
+        }
+
+        .period-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 0;
+        }
+
+        .period-stat-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .period-stat-label {
+            font-size: 1rem;
+            color: #6c757d;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .period-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .history-date-col {
+            width: 40%;
+        }
+
+        .history-change-col {
+            width: 60%;
+        }
+
+        .user-stats-section {
+            padding: 15px 0;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .week-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .week-stat-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 18px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .week-stat-label {
+            font-size: 0.95rem;
+            color: #6c757d;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .week-stat-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .user-tabs {
+            margin-bottom: 20px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+        }
+
+        .summary-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .summary-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .bg-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+        }
+
+        .bg-success {
+            background: linear-gradient(135deg, var(--success-color) 0%, var(--info-color) 100%) !important;
+        }
+
+        .bg-info {
+            background: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%) !important;
+        }
+
+        .bg-warning {
+            background: linear-gradient(135deg, var(--warning-color) 0%, var(--danger-color) 100%) !important;
+        }
+
+        .bg-danger {
+            background: linear-gradient(135deg, #b5179e 0%, #7209b7 100%) !important;
+        }
+
+        .bg-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%) !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            font-weight: 600;
+        }
+
+            .btn-primary:hover {
+                background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+            }
+
+        .other-users-card {
+            margin-top: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .other-users-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+            border-bottom: 2px solid rgba(67, 97, 238, 0.2);
+            padding-bottom: 8px;
+        }
+
+        .quick-login-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .quick-login-btn {
+            flex: 1;
+            margin: 0 5px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .update-date {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 10px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <!-- 登录界面 -->
+    <div id="login-container" class="login-container">
+        <h2 class="text-center mb-4" style="color: #343a40; font-weight: 800;">用户登录</h2>
+        <form id="login-form">
+            <div class="mb-4">
+                <label for="username" class="form-label" style="font-weight: 600;">用户名</label>
+                <input type="text" class="form-control" id="username" required style="padding: 12px; border-radius: 10px; border: 1px solid #e9ecef;">
+            </div>
+            <div class="mb-4">
+                <label for="password" class="form-label" style="font-weight: 600;">密码</label>
+                <input type="password" class="form-control" id="password" required style="padding: 12px; border-radius: 10px; border: 1px solid #e9ecef;">
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-3" style="border-radius: 10px; font-weight: 700; font-size: 1.1rem;">登录</button>
+        </form>
+
+        <div class="quick-login-buttons">
+            <button class="btn btn-outline-primary quick-login-btn" data-username="bai">白先生登录</button>
+            <button class="btn btn-outline-primary quick-login-btn" data-username="wang">王女士登录</button>
+            <button class="btn btn-outline-primary quick-login-btn" data-username="huang">黄先生登录</button>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="#" id="reset-data" style="color: #dc3545; text-decoration: none; font-weight: 600;">重置数据</a>
+        </div>
+    </div>
+
+    <!-- 主应用界面 -->
+    <div id="main-app" class="container hidden">
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 rounded" style="border-radius: 16px !important; padding: 15px 25px;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#" style="font-size: 1.8rem;">绍将天使基金</a>
+                <div class="navbar-nav ms-auto">
+                    <span class="navbar-text me-3" id="user-info" style="font-size: 1.1rem; font-weight: 600;"></span>
+                    <button class="btn btn-sm btn-outline-light" id="logout-btn" style="border-radius: 8px; font-weight: 600;">退出</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 用户概览卡片 -->
+        <div class="summary-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="summary-label">当前总资产</div>
+                    <div class="summary-value" id="total-assets">--</div>
+                    <div class="d-flex mt-3">
+                        <div class="me-4">
+                            <div class="summary-label">今日收益</div>
+                            <div id="today-earnings" class="fs-5">--</div>
+                        </div>
+                        <div>
+                            <div class="summary-label">本周收益</div>
+                            <div id="week-earnings" class="fs-5">--</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="bg-light text-dark rounded p-3 d-inline-block">
+                        <div class="fs-6">总收益率</div>
+                        <div class="fs-4 fw-bold" id="total-yield">--</div>
+                    </div>
+                </div>
+            </div>
+            <div class="update-date" id="update-date">--</div>
+        </div>
+
+        <!-- 指数模块 -->
+        <div class="card">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">指数涨跌幅</h5>
+                <span class="badge bg-light text-dark">实时</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 index-card">
+                        <h6>沪深指数</h6>
+                        <div id="sh-index" class="index-value">--</div>
+                    </div>
+                    <div class="col-md-4 index-card">
+                        <h6>深证指数</h6>
+                        <div id="sz-index" class="index-value">--</div>
+                    </div>
+                    <div class="col-md-4 index-card">
+                        <h6>创业板指数</h6>
+                        <div id="cyb-index" class="index-value">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 基金模块 -->
+        <div class="card">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">基金模块</h5>
+                <span class="badge bg-light text-dark">龙头基金</span>
+            </div>
+            <div class="card-body">
+                <div id="fund-info" class="d-flex align-items-center">
+                    <span class="me-2" style="font-size: 1.1rem;">平均涨跌幅:</span>
+                    <span id="fund-change" class="fs-4">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户模块 -->
+        <div class="card">
+            <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">用户模块</h5>
+                <span class="badge bg-light text-dark">个人资产</span>
+            </div>
+            <div class="card-body">
+                <div class="user-tabs">
+                    <ul class="nav nav-pills mb-3" id="user-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">概览</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="weekly-tab" data-bs-toggle="pill" data-bs-target="#weekly" type="button" role="tab">周收益</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="user-tabContent">
+                        <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                            <div id="personal-info"></div>
+                            <!-- 黄绍将用户可以看到的其他用户信息 -->
+                            <div id="other-users-info" class="hidden"></div>
+                        </div>
+                        <div class="tab-pane fade" id="weekly" role="tabpanel">
+                            <div id="weekly-info"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户时间段统计模块 -->
+        <div class="card">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">时间段统计</h5>
+                <span class="badge bg-light text-dark">收益概览</span>
+            </div>
+            <div class="card-body user-stats-section">
+                <div id="user-period-stats" class="period-stats">
+                    <!-- 用户时间段统计将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 默认数据 - 交易日数据
+        const defaultData = {
+            indices: {
+                sh: { changePercent: 0.55 },
+                sz: { changePercent: 0.19 },
+                cyb: { changePercent: 0.29 }
+            },
+            fundAvgChange: -0.4,
+            currentTotalMoney: 15577,
+            history: [
+                { date: "2025-09-26", value: 15774 },
+                { date: "2025-09-29", value: 15782 },
+                { date: "2025-09-30", value: 15886 },
+                { date: "2025-10-09", value: 16155 },
+                { date: "2025-10-10", value: 16000 },
+                { date: "2025-10-13", value: 16160 },
+                { date: "2025-10-14", value: 15402 },
+                { date: "2025-10-15", value: 15468 },
+                { date: "2025-10-16", value: 15097 },
+                { date: "2025-10-17", value: 14501 },
+                { date: "2025-10-20", value: 14623 },
+                { date: "2025-10-21", value: 14926 },
+                { date: "2025-10-22", value: 14782 },
+                { date: "2025-10-23", value: 14595 },
+                { date: "2025-10-24", value: 13994 },
+                { date: "2025-10-27", value: 14706 },
+                { date: "2025-10-28", value: 15031 },
+                { date: "2025-10-29", value: 14918 },
+                { date: "2025-10-30", value: 14961 },
+                { date: "2025-10-31", value: 15356 },
+                { date: "2025-11-03", value: 15577 }
+            ]
+        };
+
+        // 用户数据
+        const users = {
+            "bai": {
+                password: "bai123",
+                name: "白杰凯",
+                shares: 4050,
+                initialMoney: 4000
+            },
+            "wang": {
+                password: "wang123",
+                name: "王嘉琪",
+                shares: 3074,
+                initialMoney: 3000
+            },
+            "huang": {
+                password: "huang123",
+                name: "黄绍将",
+                shares: 8876,
+                initialMoney: 9000
+            }
+        };
+
+        // 应用状态
+        let currentUser = null;
+        let appData = loadData();
+
+        // DOM 元素
+        const loginContainer = document.getElementById('login-container');
+        const mainApp = document.getElementById('main-app');
+        const loginForm = document.getElementById('login-form');
+        const userInfo = document.getElementById('user-info');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userPeriodStats = document.getElementById('user-period-stats');
+        const otherUsersInfo = document.getElementById('other-users-info');
+        const quickLoginButtons = document.querySelectorAll('.quick-login-btn');
+        const updateDateElement = document.getElementById('update-date');
+
+        // 数据存储功能
+        function saveData() {
+            localStorage.setItem('stockFundData', JSON.stringify(appData));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('stockFundData');
+            return saved ? JSON.parse(saved) : defaultData;
+        }
+
+        // 登录功能
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (users[username] && users[username].password === password) {
+                currentUser = users[username];
+                currentUser.username = username;
+                loginContainer.classList.add('hidden');
+                mainApp.classList.remove('hidden');
+                userInfo.textContent = `欢迎, ${currentUser.name}`;
+
+                updateUI();
+            } else {
+                alert('用户名或密码错误！');
+            }
+        });
+
+        // 快速登录按钮
+        quickLoginButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const username = this.getAttribute('data-username');
+                document.getElementById('username').value = username;
+                document.getElementById('password').focus();
+            });
+        });
+
+        // 重置数据功能
+        document.getElementById('reset-data').addEventListener('click', function (e) {
+            e.preventDefault();
+            if (confirm('确定要重置所有数据吗？这将清除所有本地保存的数据。')) {
+                localStorage.removeItem('stockFundData');
+                alert('数据已重置，请刷新页面！');
+                location.reload();
+            }
+        });
+
+        // 退出登录
+        logoutBtn.addEventListener('click', function () {
+            currentUser = null;
+            mainApp.classList.add('hidden');
+            loginContainer.classList.remove('hidden');
+            loginForm.reset();
+        });
+
+        // 更新UI
+        function updateUI() {
+            // 更新指数信息
+            document.getElementById('sh-index').innerHTML = formatIndex('sh');
+            document.getElementById('sz-index').innerHTML = formatIndex('sz');
+            document.getElementById('cyb-index').innerHTML = formatIndex('cyb');
+
+            // 更新基金信息
+            const fundChangeElement = document.getElementById('fund-change');
+            fundChangeElement.textContent = `${appData.fundAvgChange > 0 ? '+' : ''}${appData.fundAvgChange}%`;
+            fundChangeElement.className = `fs-4 ${appData.fundAvgChange >= 0 ? 'positive' : 'negative'}`;
+
+            // 更新数据更新日期
+            updateDateElement.textContent = `数据更新于${formatUpdateDate()}`;
+
+            // 更新用户概览卡片
+            updateSummaryCard();
+
+            const personalInfo = document.getElementById('personal-info');
+
+            // 计算总份额
+            const totalShares = calculateTotalShares();
+            // 计算每份价值
+            const shareValue = appData.currentTotalMoney / totalShares;
+            // 计算用户当前金额
+            const userMoney = (currentUser.shares * shareValue).toFixed(2);
+            // 计算今日增长率
+            const todayGrowthRate = calculateTodayGrowthRate();
+            // 计算今日涨跌金额
+            const todayChangeAmount = calculateTodayChangeAmount();
+            // 计算用户今日涨跌金额
+            const userTodayChangeAmount = (todayChangeAmount * (currentUser.shares / totalShares)).toFixed(2);
+
+            personalInfo.innerHTML = `
+                        <div class="personal-card">
+                            <h6 class="mb-3">${currentUser.name} 的个人信息</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>持有份额:</span>
+                                        <span class="value-display">${currentUser.shares.toLocaleString()}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>当前金额:</span>
+                                        <span class="value-display">${parseFloat(userMoney).toLocaleString()} 元</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-center justify-content-center">
+                                    <div class="text-center">
+                                        <div class="mb-1">今日涨跌</div>
+                                        <div class="growth-badge ${todayGrowthRate >= 0 ? 'positive' : 'negative'}">
+                                            ${todayGrowthRate >= 0 ? '+' : ''}${todayGrowthRate}%
+                                        </div>
+                                        <div class="mt-2 ${todayChangeAmount >= 0 ? 'positive' : 'negative'}">
+                                            ${todayChangeAmount >= 0 ? '+' : ''}${parseFloat(userTodayChangeAmount).toLocaleString()} 元
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+            // 如果是黄绍将用户，显示其他用户信息
+            if (currentUser.username === 'huang') {
+                otherUsersInfo.classList.remove('hidden');
+                updateOtherUsersInfo();
+            } else {
+                otherUsersInfo.classList.add('hidden');
+            }
+
+            // 更新周收益信息
+            updateWeeklyInfo();
+
+            // 更新用户时间段统计
+            updateUserPeriodStats();
+        }
+
+        // 更新其他用户信息（仅黄绍将可见）
+        function updateOtherUsersInfo() {
+            const totalShares = calculateTotalShares();
+            const shareValue = appData.currentTotalMoney / totalShares;
+
+            let otherUsersHTML = '<div class="other-users-card"><div class="other-users-title">其他用户持仓信息</div><div class="row">';
+
+            for (const username in users) {
+                if (username !== 'huang') {
+                    const user = users[username];
+                    const userMoney = (user.shares * shareValue).toFixed(2);
+                    const holdingPercentage = ((user.shares / totalShares) * 100).toFixed(2);
+
+                    otherUsersHTML += `
+                                <div class="col-md-6">
+                                    <div class="period-stat-item">
+                                        <div class="period-stat-label">${user.name}</div>
+                                        <div class="period-stat-value">${holdingPercentage}%</div>
+                                        <div class="mt-2">
+                                            <small>份额: ${user.shares.toLocaleString()}</small>
+                                        </div>
+                                        <div class="mt-2">
+                                            <small>当前金额: ${parseFloat(userMoney).toLocaleString()} 元</small>
+                                        </div>
+                                        <div class="mt-2">
+                                            <small>初始投资: ${user.initialMoney.toLocaleString()} 元</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                }
+            }
+
+            otherUsersHTML += '</div></div>';
+            otherUsersInfo.innerHTML = otherUsersHTML;
+        }
+
+        // 更新用户概览卡片
+        function updateSummaryCard() {
+            // 计算总份额
+            const totalShares = calculateTotalShares();
+            // 计算每份价值
+            const shareValue = appData.currentTotalMoney / totalShares;
+            // 计算用户当前金额
+            const userMoney = (currentUser.shares * shareValue).toFixed(2);
+            // 计算今日增长率
+            const todayGrowthRate = calculateTodayGrowthRate();
+            // 计算今日涨跌金额
+            const todayChangeAmount = calculateTodayChangeAmount();
+            // 计算用户今日涨跌金额
+            const userTodayChangeAmount = (todayChangeAmount * (currentUser.shares / totalShares)).toFixed(2);
+            // 计算本周收益（基于上周最后一天）
+            const weekData = calculateWeekData();
+            const userWeekChangeAmount = (weekData.changeAmount * (currentUser.shares / totalShares)).toFixed(2);
+            // 计算总收益率
+            const totalYield = ((parseFloat(userMoney) - currentUser.initialMoney) / currentUser.initialMoney * 100).toFixed(2);
+
+            // 更新概览卡片
+            document.getElementById('total-assets').textContent = `${parseFloat(userMoney).toLocaleString()} 元`;
+            document.getElementById('today-earnings').innerHTML = `<span class="${todayChangeAmount >= 0 ? 'positive' : 'negative'}">${todayChangeAmount >= 0 ? '+' : ''}${parseFloat(userTodayChangeAmount).toLocaleString()} 元</span>`;
+            document.getElementById('week-earnings').innerHTML = `<span class="${weekData.changeAmount >= 0 ? 'positive' : 'negative'}">${weekData.changeAmount >= 0 ? '+' : ''}${parseFloat(userWeekChangeAmount).toLocaleString()} 元</span>`;
+            document.getElementById('total-yield').innerHTML = `<span class="${totalYield >= 0 ? 'positive' : 'negative'}">${totalYield >= 0 ? '+' : ''}${totalYield}%</span>`;
+        }
+
+        // 计算本周收益数据 - 修正为基于上周最后一天的计算
+        function calculateWeekData() {
+            const history = appData.history;
+            if (history.length < 2) return { changePercent: 0, changeAmount: 0 };
+
+            // 获取当前日期（最后一条记录的日期）
+            const currentDate = new Date(history[history.length - 1].date);
+
+            // 计算上周最后一天（本周一的前一天）
+            const monday = new Date(currentDate);
+            monday.setDate(currentDate.getDate() - (currentDate.getDay() + 6) % 7);
+            const lastWeekEnd = new Date(monday);
+            lastWeekEnd.setDate(monday.getDate() - 1);
+
+            // 找到上周最后一天的数据
+            let lastWeekEndValue = null;
+            for (let i = history.length - 1; i >= 0; i--) {
+                const recordDate = new Date(history[i].date);
+                if (recordDate <= lastWeekEnd) {
+                    lastWeekEndValue = history[i].value;
+                    break;
+                }
+            }
+
+            // 如果没有找到上周最后一天的数据，使用最早的数据
+            if (lastWeekEndValue === null && history.length > 0) {
+                lastWeekEndValue = history[0].value;
+            }
+
+            // 计算本周收益
+            const currentValue = history[history.length - 1].value;
+            const changeAmount = currentValue - lastWeekEndValue;
+            const changePercent = ((changeAmount) / lastWeekEndValue * 100).toFixed(2);
+
+            return { changePercent, changeAmount };
+        }
+
+        // 更新周收益信息
+        function updateWeeklyInfo() {
+            const weekData = calculateWeekData();
+            const totalShares = calculateTotalShares();
+            const userWeekChangeAmount = (weekData.changeAmount * (currentUser.shares / totalShares)).toFixed(2);
+            const userWeekChangePercent = (weekData.changePercent * (currentUser.shares / totalShares)).toFixed(2);
+
+            const weeklyInfo = document.getElementById('weekly-info');
+            weeklyInfo.innerHTML = `
+                        <div class="personal-card">
+                            <h6 class="mb-3">${currentUser.name} 的周收益</h6>
+                            <div class="week-stats">
+                                <div class="week-stat-item">
+                                    <div class="week-stat-label">本周收益</div>
+                                    <div class="week-stat-value ${weekData.changeAmount >= 0 ? 'positive' : 'negative'}">
+                                        ${weekData.changeAmount >= 0 ? '+' : ''}${parseFloat(userWeekChangeAmount).toLocaleString()} 元
+                                    </div>
+                                </div>
+                                <div class="week-stat-item">
+                                    <div class="week-stat-label">周收益率</div>
+                                    <div class="week-stat-value ${weekData.changePercent >= 0 ? 'positive' : 'negative'}">
+                                        ${weekData.changePercent >= 0 ? '+' : ''}${userWeekChangePercent}%
+                                    </div>
+                                </div>
+                                <div class="week-stat-item">
+                                    <div class="week-stat-label">交易天数</div>
+                                    <div class="week-stat-value">
+                                        ${appData.history.length - findWeekStartIndex()} 天
+                                    </div>
+                                </div>
+                                <div class="week-stat-item">
+                                    <div class="week-stat-label">上周最后一天资产</div>
+                                    <div class="week-stat-value">
+                                        ${parseFloat((getLastWeekEndValue() * (currentUser.shares / totalShares)).toFixed(2)).toLocaleString()} 元
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+        }
+
+        // 获取上周最后一天的价值
+        function getLastWeekEndValue() {
+            const history = appData.history;
+            const currentDate = new Date(history[history.length - 1].date);
+
+            // 计算上周最后一天（本周一的前一天）
+            const monday = new Date(currentDate);
+            monday.setDate(currentDate.getDate() - (currentDate.getDay() + 6) % 7);
+            const lastWeekEnd = new Date(monday);
+            lastWeekEnd.setDate(monday.getDate() - 1);
+
+            // 找到上周最后一天的数据
+            for (let i = history.length - 1; i >= 0; i--) {
+                const recordDate = new Date(history[i].date);
+                if (recordDate <= lastWeekEnd) {
+                    return history[i].value;
+                }
+            }
+
+            // 如果没有找到，返回最早的数据
+            return history.length > 0 ? history[0].value : 0;
+        }
+
+        // 查找本周起始索引 - 修正为基于自然周
+        function findWeekStartIndex() {
+            const history = appData.history;
+            const currentDate = new Date(history[history.length - 1].date);
+
+            // 计算本周一的日期
+            const monday = new Date(currentDate);
+            monday.setDate(currentDate.getDate() - (currentDate.getDay() + 6) % 7);
+            monday.setHours(0, 0, 0, 0);
+
+            // 找到本周的第一个交易日
+            for (let i = 0; i < history.length; i++) {
+                const recordDate = new Date(history[i].date);
+                if (recordDate >= monday) {
+                    return i;
+                }
+            }
+
+            // 如果本周没有交易日，返回最后一条记录
+            return history.length - 1;
+        }
+
+        // 更新用户时间段统计
+        function updateUserPeriodStats() {
+            updatePeriodStats(userPeriodStats);
+        }
+
+        // 更新时间段统计 - 修正为基于上周最后一天和上月最后一天
+        function updatePeriodStats(container) {
+            const history = appData.history;
+            const currentDate = new Date(history[history.length - 1].date);
+
+            // 计算本周收益（基于上周最后一天）
+            const thisWeekChange = calculateWeekData().changePercent;
+
+            // 计算本月收益（基于上月最后一天）
+            const thisMonthChange = calculateMonthData().changePercent;
+
+            container.innerHTML = '';
+
+            const periods = [
+                { label: '本周', change: parseFloat(thisWeekChange) },
+                { label: '本月', change: parseFloat(thisMonthChange) }
+            ];
+
+            periods.forEach(period => {
+                const changeClass = period.change >= 0 ? 'positive' : 'negative';
+
+                const statItem = document.createElement('div');
+                statItem.className = 'period-stat-item';
+                statItem.innerHTML = `
+                            <div class="period-stat-label">${period.label}</div>
+                            <div class="period-stat-value ${changeClass}">
+                                ${period.change >= 0 ? '+' : ''}${period.change}%
+                            </div>
+                        `;
+                container.appendChild(statItem);
+            });
+        }
+
+        // 计算本月收益数据 - 基于上月最后一天
+        function calculateMonthData() {
+            const history = appData.history;
+            if (history.length < 2) return { changePercent: 0, changeAmount: 0 };
+
+            // 获取当前日期（最后一条记录的日期）
+            const currentDate = new Date(history[history.length - 1].date);
+
+            // 计算上月最后一天（本月第一天前一天）
+            const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastMonthEnd = new Date(monthStart);
+            lastMonthEnd.setDate(monthStart.getDate() - 1);
+
+            // 找到上月最后一天的数据
+            let lastMonthEndValue = null;
+            for (let i = history.length - 1; i >= 0; i--) {
+                const recordDate = new Date(history[i].date);
+                if (recordDate <= lastMonthEnd) {
+                    lastMonthEndValue = history[i].value;
+                    break;
+                }
+            }
+
+            // 如果没有找到上月最后一天的数据，使用最早的数据
+            if (lastMonthEndValue === null && history.length > 0) {
+                lastMonthEndValue = history[0].value;
+            }
+
+            // 计算本月收益
+            const currentValue = history[history.length - 1].value;
+            const changeAmount = currentValue - lastMonthEndValue;
+            const changePercent = ((changeAmount) / lastMonthEndValue * 100).toFixed(2);
+
+            return { changePercent, changeAmount };
+        }
+
+        // 计算总份额
+        function calculateTotalShares() {
+            let total = 0;
+            for (const username in users) {
+                total += users[username].shares;
+            }
+            return total;
+        }
+
+        // 计算今日增长率（今天比昨天的涨跌）
+        function calculateTodayGrowthRate() {
+            const history = appData.history;
+            if (history.length < 2) return 0;
+
+            const todayValue = history[history.length - 1].value;
+            const yesterdayValue = history[history.length - 2].value;
+
+            return ((todayValue - yesterdayValue) / yesterdayValue * 100).toFixed(2);
+        }
+
+        // 计算今日涨跌金额
+        function calculateTodayChangeAmount() {
+            const history = appData.history;
+            if (history.length < 2) return 0;
+
+            const todayValue = history[history.length - 1].value;
+            const yesterdayValue = history[history.length - 2].value;
+
+            return todayValue - yesterdayValue;
+        }
+
+        // 格式化指数显示
+        function formatIndex(index) {
+            const data = appData.indices[index];
+            const changeClass = data.changePercent >= 0 ? 'positive' : 'negative';
+            return `
+                        <span class="${changeClass}">${data.changePercent >= 0 ? '+' : ''}${data.changePercent.toFixed(2)}%</span>
+                    `;
+        }
+
+        // 格式化更新日期
+        function formatUpdateDate() {
+            const history = appData.history;
+            if (history.length === 0) return '--';
+
+            const lastDate = new Date(history[history.length - 1].date);
+            return `${lastDate.getMonth() + 1}月${lastDate.getDate()}日`;
+        }
+
+        // 计算涨跌幅
+        function calculateChangePercent(current, previous) {
+            if (!previous || previous === 0) return 0;
+            return ((current - previous) / previous * 100).toFixed(2);
+        }
+    </script>
+</body>
+</html>
